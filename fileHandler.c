@@ -31,7 +31,7 @@ int readFile (char *filename, config_t *conf, object_t ***eco) {
 		insert_into_matrix(matrix, object_type, p);
 	}
 
-	printMatrix (matrix, conf->L, conf->C);
-
+	*eco = matrix;
+	
 	return 1;
 }
