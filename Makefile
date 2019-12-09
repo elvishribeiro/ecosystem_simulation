@@ -5,7 +5,7 @@ PROJ_NAME=main
 C_SOURCE=$(wildcard *.c)
  
 # .h files
-H_SOURCE=$(wildcard *.h)
+H_SOURCE=$(wildcard headers/*.h)
  
 # Object files
 OBJ=$(C_SOURCE:.c=.o)

@@ -1,3 +1,4 @@
+/*Struct with the configuration passed by the file*/
 #ifndef CONFIG_H
 	#define CONFIG_H
 	typedef struct config_t {
