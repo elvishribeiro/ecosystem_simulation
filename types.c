@@ -1,30 +1,26 @@
 #include "headers/types_t.h"
 
 object_t **allocateMatrix (int L, int C) {
-    object_t **matrix = malloc(L * sizeof(object_t*));
-    matrix[0] = malloc(L * C * sizeof(object_t));
-
-    if (matrix == NULL){
-        perror("Error in function allocateMatrix: ");
-        exit(EXIT_FAILURE);
-    }
-
-    for(int i = 1; i < C; i++) 
-        matrix[i] = matrix[i-1] + L;
-
-    return matrix;
+	object_t **matrix = (object_t**) malloc(L*sizeof(object_t*));
+	for (int i = 0; i < L; i++) {
+		matrix[i] = (object_t*) malloc(C*sizeof(object_t));
+	}
+	return matrix;
 }
 
-void freeMatrix (object_t** matrix){
-    free(matrix[0]);
-    free(matrix);
+
+void deepcopy (object_t** A, object_t** B, int L, int C) {
+	for (int i = 0; i < L; i++) {
+		for (int j = 0; j < C; j++) {
+			A[i][j] = B[i][j];
+		}
+	}
 }
 
 void printMatrix (object_t **eco, int X, int Y) {
 	for (int i = 0; i < X; i++){
 		for (int j = 0; j < Y; j++) {
-			printf("%p ", &(eco[i][j]));
-			/*if (eco[i][j].type == EMPTY)
+			if (eco[i][j].type == EMPTY)
 				printf(" ");
 			else if (eco[i][j].type == ROCK)
 				printf("*");
@@ -33,7 +29,7 @@ void printMatrix (object_t **eco, int X, int Y) {
 			else if (eco[i][j].type == FOX)
 				printf("F");
 			else
-				printf("?");*/
+				printf("?");
 		}
 		printf("\n");
 	}

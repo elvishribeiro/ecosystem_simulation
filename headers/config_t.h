@@ -5,7 +5,7 @@
 		unsigned short int GEN_PROC_COELHOS;
 		unsigned short int GEN_PROC_RAPOSAS;
 		unsigned short int GEN_COMIDA_RAPOSAS;
-		unsigned short int N_GEN;
+		unsigned int N_GEN;
 		unsigned int L;
 		unsigned int C;
 	} config_t;
