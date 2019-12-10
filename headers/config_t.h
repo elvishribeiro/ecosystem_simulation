@@ -8,5 +8,6 @@
 		unsigned int N_GEN;
 		unsigned int L;
 		unsigned int C;
+		unsigned int GEN;
 	} config_t;
 #endif
