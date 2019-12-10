@@ -20,30 +20,49 @@ int main (int argc, char **argv) {
 	coord_t p;
 
 	
-	readFile("config2.ini", &conf, &eco);
+	readFile("config.ini", &conf, &eco);
 
 	int matrix_size = conf.L*conf.C*sizeof(object_t);
 
 	next_eco = allocateMatrix(conf.L, conf.C);
 	deepcopy(next_eco, eco, conf.L, conf.C);
 
+	//system("clear");
+	printf("-------GEN:%2d-------\n", 0);
 
 	printMatrix (eco, conf.L, conf.C);
-	printf("--------\n");
+	printf("-------GEN:%2d-------\n", 1);
 
-	for (unsigned int t = 0; t < conf.N_GEN; t++){
+
+	for (unsigned int t = 1; t <= conf.N_GEN; t++){
 		for (unsigned int i = 0; i < conf.L; i++){
 			for (unsigned int j = 0; j < conf.C; j++){
 				p = (coord_t){.x = i, .y = j};
 				if (eco[i][j].type == RABBIT){
 					rabbit_rules (eco, next_eco, conf, p);
-				}
+				}	
 			}
 		}
 		deepcopy(eco, next_eco, conf.L, conf.C);
+		//printMatrix (eco, conf.L, conf.C);
+		//sleep(1);
+		//system("clear");
+		//printf("-------GEN:%2d-------\n", t);
+		for (unsigned int i = 0; i < conf.L; i++){
+			for (unsigned int j = 0; j < conf.C; j++){
+				p = (coord_t){.x = i, .y = j};
+				if (eco[i][j].type == FOX){
+					fox_rules (eco, next_eco, conf, p);
+				}	
+			}
+		}
+		deepcopy(eco, next_eco, conf.L, conf.C);
+
 		printMatrix (eco, conf.L, conf.C);
-		printf("--------\n");
 		conf.GEN++;
+		//sleep(1);
+		//system("clear");
+		printf("-------GEN:%2d-------\n", t+1);
 	}
 
 	return 0;

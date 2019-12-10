@@ -19,20 +19,23 @@ void deepcopy (object_t** A, object_t** B, int L, int C) {
 
 void printMatrix (object_t **eco, int X, int Y) {
 	for (int i = 0; i < X; i++){
+		printf("|");
 		for (int j = 0; j < Y; j++) {
 			if (eco[i][j].type == EMPTY)
-				printf(" ");
+				printf("   ");
 			else if (eco[i][j].type == ROCK)
-				printf("*");
+				printf(" * ");
 			else if (eco[i][j].type == RABBIT)
-				printf("R");
+				printf(_GREEN"R%d "_RESET, RABBIT_P(eco[i][j].entity)->age);
 			else if (eco[i][j].type == FOX)
-				printf("F");
+				printf(_RED"F%d%d"_RESET, FOX_P(eco[i][j].entity)->age, FOX_P(eco[i][j].entity)->hunger);
 			else
 				printf("?");
+			printf("|");
 		}
 		printf("\n");
 	}
+	printf("---------------------\n");
 }
 
 int insert_into_matrix (object_t **matrix, char* object_type, coord_t p) {

@@ -16,6 +16,14 @@
 	#define RABBIT_P(A) ((rabbit_t*)A)
 	#define FOX_P(A) ((fox_t*)A)
 	
+	#define _RED     "\033[1m\033[31m"
+	#define _GREEN   "\033[1m\033[32m"
+	#define _YELLOW  "\033[1m\033[33m"
+	#define _BLUE    "\033[1m\033[34m"
+	#define _MAGENTA "\033[1m\033[35m"
+	#define _CYAN    "\033[1m\033[36m"
+	#define _RESET   "\x1b[0m"
+
 
 	typedef struct rabbit_t {
 		unsigned int age;
@@ -27,7 +35,7 @@
 	} fox_t;
 
 	typedef struct object_t {
-		unsigned short int type;
+		unsigned short int type; 
 		void *entity;
 	} object_t;
 
