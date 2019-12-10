@@ -23,7 +23,6 @@ int readFile (char *filename, config_t *conf, object_t ***eco) {
 										&(conf->L),
 										&(conf->C),
 										&N);
-	conf->GEN = 0;
 	
 	matrix = allocateMatrix(conf->L, conf->C);
 

@@ -37,41 +37,18 @@ void printMatrix (object_t **eco, int X, int Y) {
 
 int insert_into_matrix (object_t **matrix, char* object_type, coord_t p) {
 	if (strcmp(object_type, "COELHO") == 0) {
-		new_rabbit(&matrix[p.x][p.y], 0);
+		matrix[p.x][p.y].type = RABBIT;
+		matrix[p.x][p.y].entity = (rabbit_t*) malloc (sizeof(rabbit_t));
+
 	}
 	else if (strcmp(object_type, "RAPOSA") == 0) {
-		new_fox(&matrix[p.x][p.y], 0, 0);
+		matrix[p.x][p.y].type = FOX;
+		matrix[p.x][p.y].entity = (fox_t*) malloc (sizeof(fox_t));
 	}
 	else if (strcmp(object_type, "ROCHA") == 0) {
-		new_rock(&matrix[p.x][p.y]);
+		matrix[p.x][p.y].type = ROCK;
+		matrix[p.x][p.y].entity = NULL;
 	}
 
 	return 1;
-}
-
-void new_rabbit (object_t *object, unsigned int age) {
-	object->type = RABBIT;
-	if (object->entity != NULL) free(object->entity);
-	object->entity = (rabbit_t*) malloc(sizeof(rabbit_t));
-	RABBIT_P(object->entity)->age = age;
-}
-
-void new_fox (object_t *object, unsigned int age, unsigned int hunger) {
-	object->type = FOX;
-	if (object->entity != NULL) free(object->entity);
-	object->entity = (fox_t*) malloc(sizeof(fox_t));
-	FOX_P(object->entity)->age = age;
-	FOX_P(object->entity)->hunger = hunger;
-}
-
-void new_rock (object_t *object) {
-	object->type = ROCK;
-	if (object->entity != NULL) free(object->entity);
-	object->entity = NULL;
-}
-
-void empty (object_t *object) {
-	object->type = EMPTY;
-	//if (object->entity != NULL) free(object->entity);
-	object->entity = NULL;
 }
