@@ -22,41 +22,41 @@ int main (int argc, char **argv) {
 	
 	readFile(argv[1], &conf, &eco);
 
-	int matrix_size = conf.L*conf.C*sizeof(object_t);
-
 	next_eco = allocateMatrix(conf.L, conf.C);
 	deepcopy(next_eco, eco, conf.L, conf.C);
 
-	system("clear");
+	//system("clear");
 	printf("-------GEN:%2d-------\n", 0);
 	printMatrix (eco, conf.L, conf.C, conf);
 
 	//usleep(500000);
-	getchar();
-	system("clear");
-	printf("-------GEN:%2d-------\n", 1);
+	//getchar();
+	//system("clear");
+	//printf("-------GEN:%2d-------\n", 1);
 
 	for (unsigned int t = 1; t <= conf.N_GEN; t++){
 		conf.GEN++;
+		// COELHO
 		for (unsigned int i = 0; i < conf.L; i++){
 			for (unsigned int j = 0; j < conf.C; j++){
-				p = (coord_t){.x = i, .y = j};
 				if (eco[i][j].type == RABBIT){
+					p = (coord_t){.x = i, .y = j};
 					rabbit_rules (eco, next_eco, conf, p);
 				}	
 			}
 		}
 		conflict(next_eco, conf, RABBIT);
 		deepcopy(eco, next_eco, conf.L, conf.C);
-		printMatrix (eco, conf.L, conf.C, conf);
+
+		//printMatrix (eco, conf.L, conf.C, conf);
 		//usleep(500000);
-		getchar();
-		system("clear");
-		printf("-------GEN:%2d-------\n", t);
+		//getchar();
+		//system("clear");
+		//printf("-------GEN:%2d-------\n", t);
 		for (unsigned int i = 0; i < conf.L; i++){
 			for (unsigned int j = 0; j < conf.C; j++){
-				p = (coord_t){.x = i, .y = j};
 				if (eco[i][j].type == FOX){
+					p = (coord_t){.x = i, .y = j};
 					fox_rules (eco, next_eco, conf, p);
 				}	
 			}
@@ -64,13 +64,14 @@ int main (int argc, char **argv) {
 		conflict(next_eco, conf, FOX);
 		deepcopy(eco, next_eco, conf.L, conf.C);
 
-		printMatrix (eco, conf.L, conf.C, conf);
+		//printMatrix (eco, conf.L, conf.C, conf);
 		//usleep(500000);
-		getchar();
-		system("clear");
-		printf("-------GEN:%2d-------\n", t+1);
+		//getchar();
+		//system("clear");
+		//printf("-------GEN:%2d-------\n", t+1);
 	}
 
+	printf("-------GEN:%2d-------\n", conf.GEN);
 	printMatrix (eco, conf.L, conf.C, conf);
 
 	return 0;

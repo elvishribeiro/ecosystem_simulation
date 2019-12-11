@@ -130,8 +130,8 @@ void fox_rules (object_t **eco, object_t **next_eco, config_t conf, coord_t p) {
 	/* Movement */ 
 	if (!predation(eco, next_eco, conf, p)) {
 		eco[p.x][p.y].animal.hunger++;
-		if(eco[p.x][p.y].animal.hunger >= conf.GEN_COMIDA_RAPOSAS){
-			next_eco[p.x][p.y].type = EMPTY;
+		if(eco[p.x][p.y].animal.hunger >= conf.GEN_COMIDA_RAPOSAS){		//death
+			clear_position(&(next_eco[p.x][p.y]));
 		}
 		else
 			fox_move(eco, next_eco, conf, p);
