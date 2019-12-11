@@ -9,4 +9,6 @@
 
 	void rabbit_rules (object_t **eco, object_t **next_eco, config_t conf, coord_t p);
 	void fox_rules (object_t **eco, object_t **next_eco, config_t conf, coord_t p);
+	void conflict (object_t **next_eco, config_t conf, int type);
+
 #endif
