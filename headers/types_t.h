@@ -36,6 +36,8 @@
 
 	typedef struct object_t {
 		unsigned short int type; 
+		struct object_t *candidates;
+		unsigned short int candidates_n;
 		void *entity;
 	} object_t;
 
@@ -45,10 +47,10 @@
 	void deepcopy (object_t** A, object_t** B, int L, int C);
 
 	/*These functions transforms the object into a new_'entity'*/
-	void new_rabbit(object_t *object, unsigned int age);
-	void new_fox(object_t *object_t, unsigned int age, unsigned int hunger);
-	void new_rock(object_t *object_t);
-	void empty(object_t *object_t);
+	object_t new_rabbit(unsigned int age);
+	object_t new_fox(unsigned int age, unsigned int hunger);
+	object_t new_rock();
+	object_t empty();
 
 
 #endif

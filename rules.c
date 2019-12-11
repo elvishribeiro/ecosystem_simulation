@@ -43,7 +43,8 @@ void rabbit_insert (object_t **eco, object_t **next_eco, rabbit_t r, coord_t p) 
 		if (RABBIT_P(next_eco[p.x][p.y].entity)->age > r.age)						/*(comparing next_eco instead of eco)*/
 			return;
 	}
-	new_rabbit(&next_eco[p.x][p.y], r.age);
+	next_eco[p.x][p.y].entity = NULL;
+	next_eco[p.x][p.y] = new_rabbit(r.age);
 }
 
 /* Make a move if a available slot is found and returns the new position*/
@@ -52,11 +53,13 @@ int rabbit_move (object_t **eco, object_t **next_eco, config_t conf, coord_t p) 
 	if (new.x >= 0 && new.y >= 0){
 		if (RABBIT_P(next_eco[p.x][p.y].entity)->age >= conf.GEN_PROC_COELHOS) {		/* Reproduction */
 			rabbit_insert(eco, next_eco, (rabbit_t){.age = 0}, new);
-			new_rabbit(&next_eco[p.x][p.y], 0);										/*newborns don't age*/
+			next_eco[p.x][p.y].entity = NULL;
+			next_eco[p.x][p.y] = new_rabbit(0);										/*newborns don't age*/
 		} 
 		else {																/* Move without reproducing */
 			rabbit_insert(eco, next_eco, *RABBIT_P(eco[p.x][p.y].entity), new);
-			empty(&next_eco[p.x][p.y]);
+			next_eco[p.x][p.y].entity = NULL;
+			next_eco[p.x][p.y] = empty();
 			RABBIT_P(next_eco[new.x][new.y].entity)->age++;									/*aging*/
 		}
 		return 1;
@@ -78,26 +81,33 @@ void rabbit_rules (object_t **eco, object_t **next_eco, config_t conf, coord_t p
 
 /*Insert the fox f into the next_eco in the position p, resolving conflicts if they ocour*/
 void fox_insert (object_t **eco, object_t **next_eco, fox_t f, coord_t p) {
-	if (next_eco[p.x][p.y].type == FOX) {										/*Conflict: somebody moved here */
-		if (FOX_P(next_eco[p.x][p.y].entity)->age > f.age){						/*(comparing next_eco instead of eco)*/
+	if (next_eco[p.x][p.y].type == FOX) {										//Conflict: somebody moved here
+/*		int candidate_id = next_eco[p.x][p.y].candidates_n++;
+		next_eco[p.x][p.y].candidates[candidate_id] = f;*/
+		if (FOX_P(next_eco[p.x][p.y].entity)->age > f.age){						//(comparing next_eco instead of eco)
 			return;
 		}
 		else if (FOX_P(next_eco[p.x][p.y].entity)->age < f.age){
-			new_fox(&next_eco[p.x][p.y], f.age, f.hunger);
+			next_eco[p.x][p.y].entity = NULL;
+			next_eco[p.x][p.y] = new_fox(f.age, f.hunger);
 			return;
 		}
-		else {																/*ages are equal*/
+		else {																//ages are equal
 			if (FOX_P(next_eco[p.x][p.y].entity)->hunger < f.hunger){		
 				return;
 			}
 			else{
-				new_fox(&next_eco[p.x][p.y], f.age, f.hunger);
+				next_eco[p.x][p.y].entity = NULL;
+				next_eco[p.x][p.y] = new_fox(f.age, f.hunger);
 				return;
 			}
 		}
 	}
 	else {
-		new_fox(&next_eco[p.x][p.y], f.age, f.hunger);
+		next_eco[p.x][p.y].entity = NULL;
+		next_eco[p.x][p.y] = new_fox(f.age, f.hunger);
+		//int candidate_id = next_eco[p.x][p.y].candidates_n++;
+		//next_eco[p.x][p.y].candidates[candidate_id] = f;
 		return;
 	}
 }
@@ -108,13 +118,15 @@ int predation(object_t **eco, object_t **next_eco, config_t conf, coord_t p) {
 	if (new.x >= 0 && new.y >= 0){
 		if (FOX_P(next_eco[p.x][p.y].entity)->age >= conf.GEN_PROC_RAPOSAS) {		/* Reproduction */
 			fox_insert(eco, next_eco, (fox_t){.age = 0, .hunger = 0}, new);
-			new_fox(&next_eco[p.x][p.y], 0, 0);
+			next_eco[p.x][p.y].entity = NULL;
+			next_eco[p.x][p.y] = new_fox(0, 0);
 		} 
 		else {																/* Move without reproducing */
 			fox_insert(eco, next_eco, *FOX_P(eco[p.x][p.y].entity), new);		
 			FOX_P(next_eco[new.x][new.y].entity)->hunger = 0;
 			FOX_P(next_eco[new.x][new.y].entity)->age++;
-			empty(&next_eco[p.x][p.y]);
+			next_eco[p.x][p.y].entity = NULL;
+			next_eco[p.x][p.y] = empty();
 		}
 		return 1;
 	}
@@ -129,11 +141,13 @@ int fox_move (object_t **eco, object_t **next_eco, config_t conf, coord_t p) {
 	if (new.x >= 0 && new.y >= 0){
 		if (FOX_P(next_eco[p.x][p.y].entity)->age >= conf.GEN_PROC_RAPOSAS) {		/* Reproduction */
 			fox_insert(eco, next_eco, (fox_t){.age = 0, .hunger = 0}, new);
-			new_fox(&next_eco[p.x][p.y], 0, 0);
+			next_eco[p.x][p.y].entity = NULL;
+			next_eco[p.x][p.y] = new_fox(0, 0);
 		} else {																/* Move without reproducing */
 			fox_insert(eco, next_eco, *FOX_P(eco[p.x][p.y].entity), new);
-			FOX_P(next_eco[new.x][new.y].entity)->age++;		
-			empty(&next_eco[p.x][p.y]);
+			FOX_P(next_eco[new.x][new.y].entity)->age++;
+			next_eco[p.x][p.y].entity = NULL;
+			next_eco[p.x][p.y] = empty();
 		}
 		return 1;
 	}
@@ -142,11 +156,14 @@ int fox_move (object_t **eco, object_t **next_eco, config_t conf, coord_t p) {
 
 void fox_rules (object_t **eco, object_t **next_eco, config_t conf, coord_t p) {
 	/* Aging */
-	FOX_P(next_eco[p.x][p.y].entity)->hunger++;
+	//FOX_P(next_eco[p.x][p.y].entity)->hunger++;
 	/* Movement */ 
 	if (!predation(eco, next_eco, conf, p)) {
-		if(FOX_P(eco[p.x][p.y].entity)->hunger >= conf.GEN_COMIDA_RAPOSAS)
-			empty(&next_eco[p.x][p.y]);
+		FOX_P(next_eco[p.x][p.y].entity)->hunger++;
+		if(FOX_P(eco[p.x][p.y].entity)->hunger >= conf.GEN_COMIDA_RAPOSAS){
+			next_eco[p.x][p.y].entity = NULL;
+			next_eco[p.x][p.y] = empty();
+		}
 		else
 			fox_move(eco, next_eco, conf, p);
 	}
