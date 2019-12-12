@@ -1,3 +1,9 @@
+L = 30000
+N = random.randint(int(L * L * .35), int(L * L * .5))
+G_P_C = random.randint(1, 5)
+G_P_R = random.randint(1, 5)
+G_C_R = random.randint(2, 8)
+
 N_GEN = 30
 
 x_pos = [i for i in range(L - 1)]
