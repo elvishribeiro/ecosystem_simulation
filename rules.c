@@ -42,7 +42,7 @@ void rabbit_insert (object_t **eco, object_t **next_eco, animal_t r, coord_t p) 
 	int candidate_id = next_eco[p.x][p.y].candidates_n;
 
 	next_eco[p.x][p.y].type = RABBIT;
-	next_eco[p.x][p.y].candidates[candidate_id] = new_animal(r.age, r.hunger, p, r.GEN);
+	next_eco[p.x][p.y].candidates[candidate_id] = NEWANIMAL(r.gen_nascimento, r.gen_comida);
 	next_eco[p.x][p.y].candidates_n++;
 }
 
@@ -50,11 +50,11 @@ void rabbit_insert (object_t **eco, object_t **next_eco, animal_t r, coord_t p) 
 int rabbit_move (object_t **eco, object_t **next_eco, config_t conf, coord_t p) {
 	coord_t new = neighbour(eco, conf, p, EMPTY);										
 	if (new.x >= 0 && new.y >= 0){
-		if (conf.GEN - eco[p.x][p.y].animal.GEN > conf.GEN_PROC_COELHOS) {		// Reproduction 
+		if (conf.GEN - eco[p.x][p.y].animal.gen_nascimento > conf.GEN_PROC_COELHOS) {		// Reproduction 
 			clear_position(&(next_eco[p.x][p.y]));
 			clear_position(&(next_eco[new.x][new.y]));
-			rabbit_insert(eco, next_eco, new_animal(0, -1, p, conf.GEN), p);
-			rabbit_insert(eco, next_eco, new_animal(0, -1, new, conf.GEN), new);
+			rabbit_insert(eco, next_eco, NEWANIMAL(conf.GEN, -1), p);
+			rabbit_insert(eco, next_eco, NEWANIMAL(conf.GEN, -1), new);
 		} 
 		else {																// Move without reproducing 
 			rabbit_insert(eco, next_eco, eco[p.x][p.y].animal, new);
@@ -81,7 +81,7 @@ void rabbit_rules (object_t **eco, object_t **next_eco, config_t conf, coord_t p
 void fox_insert (object_t **eco, object_t **next_eco, animal_t f, coord_t p) {
 	next_eco[p.x][p.y].type = FOX;
 	int candidate_id = next_eco[p.x][p.y].candidates_n;
-	next_eco[p.x][p.y].candidates[candidate_id] = new_animal(f.age, f.hunger, p, f.GEN);
+	next_eco[p.x][p.y].candidates[candidate_id] = NEWANIMAL(f.gen_nascimento, f.gen_comida);
 	next_eco[p.x][p.y].candidates_n++;
 }
 
@@ -89,13 +89,13 @@ int predation(object_t **eco, object_t **next_eco, config_t conf, coord_t p) {
 	coord_t new = neighbour(eco, conf, p, RABBIT);
 
 	if (new.x >= 0 && new.y >= 0){
-		if (conf.GEN - next_eco[p.x][p.y].animal.GEN > conf.GEN_PROC_RAPOSAS) {		/* Reproduction */
-			fox_insert(eco, next_eco, new_animal(0, 0, new, conf.GEN), new);
+		if (conf.GEN - next_eco[p.x][p.y].animal.gen_nascimento > conf.GEN_PROC_RAPOSAS) {		/* Reproduction */
+			fox_insert(eco, next_eco, NEWANIMAL(conf.GEN, conf.GEN), new);
 			next_eco[p.x][p.y].type = FOX;
-			next_eco[p.x][p.y].animal = new_animal(0, 0, p, conf.GEN);
+			next_eco[p.x][p.y].animal = NEWANIMAL(conf.GEN, conf.GEN);
 		} 
 		else {																/* Move without reproducing */
-			eco[p.x][p.y].animal.hunger = 0;
+			eco[p.x][p.y].animal.gen_comida = conf.GEN;
 			fox_insert(eco, next_eco, eco[p.x][p.y].animal, new);
 			clear_position(&(next_eco[p.x][p.y]));
 		}
@@ -110,11 +110,11 @@ int fox_move (object_t **eco, object_t **next_eco, config_t conf, coord_t p) {
 	coord_t new = neighbour(eco, conf, p, EMPTY);
 
 	if (new.x >= 0 && new.y >= 0){
-		if (next_eco[p.x][p.y].animal.age >= conf.GEN_PROC_RAPOSAS) {		/* Reproduction */
+		if (conf.GEN - next_eco[p.x][p.y].animal.gen_nascimento > conf.GEN_PROC_RAPOSAS) {		/* Reproduction */
 			clear_position(&(next_eco[p.x][p.y]));
 			clear_position(&(next_eco[new.x][new.y]));
-			fox_insert(eco, next_eco, new_animal(0, 0, p, conf.GEN), p);
-			fox_insert(eco, next_eco, new_animal(0, 0, new, conf.GEN), new);
+			fox_insert(eco, next_eco, NEWANIMAL(conf.GEN, conf.GEN), p);
+			fox_insert(eco, next_eco, NEWANIMAL(conf.GEN, conf.GEN), new);
 		} else {																/* Move without reproducing */
 			fox_insert(eco, next_eco, eco[p.x][p.y].animal, new);
 			clear_position(&(next_eco[p.x][p.y]));
@@ -129,8 +129,7 @@ void fox_rules (object_t **eco, object_t **next_eco, config_t conf, coord_t p) {
 	//FOX_P(next_eco[p.x][p.y].entity)->hunger++;
 	/* Movement */ 
 	if (!predation(eco, next_eco, conf, p)) {
-		eco[p.x][p.y].animal.hunger++;
-		if(eco[p.x][p.y].animal.hunger >= conf.GEN_COMIDA_RAPOSAS){		//death
+		if(conf.GEN - eco[p.x][p.y].animal.gen_comida > conf.GEN_COMIDA_RAPOSAS){		//death
 			clear_position(&(next_eco[p.x][p.y]));
 		}
 		else
@@ -143,7 +142,7 @@ animal_t choose_rabbit (object_t object) {
 	int n = object.candidates_n;
 	animal_t animal = animals[0];
 	for (int i = 0; i < n; i++){
-		if (animal.GEN < animals[i].GEN)
+		if (animal.gen_nascimento < animals[i].gen_nascimento)
 			continue;
 		else
 			animal = animals[i];
@@ -156,13 +155,13 @@ animal_t choose_fox (object_t object) {
 	int n = object.candidates_n;
 	animal_t animal = animals[0];
 	for (int i = 0; i < n; i++){
-		if (animal.GEN < animals[i].GEN){
+		if (animal.gen_nascimento < animals[i].gen_nascimento){
 			continue;
 		}
-		else if (animal.GEN > animals[i].GEN){
+		else if (animal.gen_nascimento > animals[i].gen_nascimento){
 			animal = animals[i];
 		} else {
-			if (animal.hunger < animals[i].GEN){
+			if (animal.gen_comida < animals[i].gen_comida){
 				continue;
 			}
 			else {

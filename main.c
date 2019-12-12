@@ -21,18 +21,19 @@ int main (int argc, char **argv) {
 
 	
 	readFile(argv[1], &conf, &eco);
-
+	//readFile("mx/m30.txt", &conf, &eco);
 	next_eco = allocateMatrix(conf.L, conf.C);
 	deepcopy(next_eco, eco, conf.L, conf.C);
 
-	//system("clear");
-	printf("-------GEN:%2d-------\n", 0);
-	printMatrix (eco, conf.L, conf.C, conf);
-
-	//usleep(500000);
-	//getchar();
-	//system("clear");
-	//printf("-------GEN:%2d-------\n", 1);
+	#ifdef STEP
+		system("clear");
+		printf("-------GEN:%2d-------\n", 0);
+		printMatrix (eco, conf.L, conf.C, conf);
+		
+		getchar();
+		system("clear");
+		printf("-------GEN:%2d-------\n", 1);
+	#endif
 
 	for (unsigned int t = 1; t <= conf.N_GEN; t++){
 		conf.GEN++;
@@ -48,11 +49,12 @@ int main (int argc, char **argv) {
 		conflict(next_eco, conf, RABBIT);
 		deepcopy(eco, next_eco, conf.L, conf.C);
 
-		//printMatrix (eco, conf.L, conf.C, conf);
-		//usleep(500000);
-		//getchar();
-		//system("clear");
-		//printf("-------GEN:%2d-------\n", t);
+/*		#ifdef STEP
+			printMatrix (eco, conf.L, conf.C, conf);
+			getchar();
+			system("clear");
+			printf("-------GEN:%2d-------\n", t);
+		#endif*/
 		for (unsigned int i = 0; i < conf.L; i++){
 			for (unsigned int j = 0; j < conf.C; j++){
 				if (eco[i][j].type == FOX){
@@ -64,15 +66,18 @@ int main (int argc, char **argv) {
 		conflict(next_eco, conf, FOX);
 		deepcopy(eco, next_eco, conf.L, conf.C);
 
-		//printMatrix (eco, conf.L, conf.C, conf);
-		//usleep(500000);
-		//getchar();
-		//system("clear");
-		//printf("-------GEN:%2d-------\n", t+1);
+		#ifdef STEP
+			printMatrix (eco, conf.L, conf.C, conf);
+			getchar();
+			system("clear");
+			printf("-------GEN:%2d-------\n", t+1);
+		#endif
 	}
 
-	printf("-------GEN:%2d-------\n", conf.GEN);
-	printMatrix (eco, conf.L, conf.C, conf);
+	#ifdef STEP
+		printf("-------GEN:%2d-------\n", conf.GEN);
+		printMatrix (eco, conf.L, conf.C, conf);
+	#endif
 
 	return 0;
 }
