@@ -7,7 +7,7 @@ random.shuffle(y_pos)
 
 for i in range(1):
     with open('m' + str(i) + '.txt', 'w') as f:
-        f.write(str(G_P_C) + ' ' + str(G_P_R) + ' ' + str(G_C_R) + ' ' + str(N_$
+        f.write(str(G_P_C) + ' ' + str(G_P_R) + ' ' + str(G_C_R) + ' ' + str(N))
         for j in tqdm(range(N - 1), position=0):
             if j < L - 1:
                 x = x_pos[j]
