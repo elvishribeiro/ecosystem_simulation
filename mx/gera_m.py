@@ -1,3 +1,6 @@
+import random
+from tqdm import tqdm
+
 L = 30000
 N = random.randint(int(L * L * .35), int(L * L * .5))
 G_P_C = random.randint(1, 5)
