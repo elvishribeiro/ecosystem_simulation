@@ -33,4 +33,4 @@ main.o: main.c $(H_SOURCE)
 	$(CC) -o $@ $< $(CC_FLAGS)
 
 clean:
-	rm -rf *.o $(PROJ_NAME) *~
+	rm -rf *.o *.out *.dot *.txt $(PROJ_NAME) *~
