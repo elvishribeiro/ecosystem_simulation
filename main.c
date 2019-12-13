@@ -8,6 +8,34 @@
 #include "headers/rules.h"
 #include "headers/coord_t.h"
 
+void printResult (object_t **eco, config_t conf) {
+	int N = 0;
+	for (unsigned int i = 0; i < conf.L; i++)
+		for (unsigned int j = 0; j < conf.C; j++)
+			if (eco[i][j].type != EMPTY)
+				N++;
+
+	printf("%u %u %u 0 %u %u %u\n",conf.GEN_PROC_COELHOS,
+									conf.GEN_PROC_RAPOSAS,
+									conf.GEN_COMIDA_RAPOSAS,
+									conf.L,
+									conf.C,
+									N);
+	for (unsigned int i = 0; i < conf.L; i++)
+		for (unsigned int j = 0; j < conf.C; j++)
+			if (eco[i][j].type != EMPTY){
+				if (eco[i][j].type == FOX) {
+					printf("RAPOSA %d %d\n", i, j);
+				}
+				else if (eco[i][j].type == RABBIT) {
+					printf("COELHO %d %d\n", i, j);
+				}
+				else if (eco[i][j].type == ROCK) {
+					printf("ROCHA %d %d\n", i, j);
+				}
+			}
+}
+
 int main (int argc, char **argv) {
 	if (argc < 2) {
 		printf("Usage:\n%s <config_file>\n\n", argv[0]);
@@ -79,5 +107,6 @@ int main (int argc, char **argv) {
 		printMatrix (eco, conf.L, conf.C, conf);
 	#endif
 
+	printResult(eco, conf);
 	return 0;
 }
