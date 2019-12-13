@@ -51,7 +51,7 @@ for L_i in L:
     pos = gera_posicoes([L_i - 1, L_i - 1])
     random.shuffle(pos)
 
-    N = int(((L_i - 1) ** 2) * .4)
+    N = int((L_i ** 2) * .4)
     n_obj = [[int(N * porc_coelhos), 'COELHO'], [int(N * porc_raposas), 'RAPOSA'], [int(N * porc_rochas), 'ROCHA']]
 
     total = sum([o[0] for o in n_obj])
@@ -60,14 +60,14 @@ for L_i in L:
         n_obj[-1][0] += N - total
         total += N - total
 
-    with open('m' + str(L_i - 1) + '.txt', 'w') as f:
+    with open('m' + str(L_i) + '.txt', 'w') as f:
         f.write(
             str(GEN_PROC_COELHO) + ' ' + 
             str(GEN_PROC_RAPOSA) + ' ' + 
             str(GEN_COMIDA_RAPOSA) + ' ' + 
             str(N_GEN) + ' ' + 
-            str(L_i - 1) + ' ' + 
-            str(L_i - 1) + ' ' + 
+            str(L_i) + ' ' + 
+            str(L_i) + ' ' + 
             str(total) + '\n'
             )
 
