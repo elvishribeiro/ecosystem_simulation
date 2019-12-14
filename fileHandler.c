@@ -16,7 +16,7 @@ int readFile (char *filename, config_t *conf, object_t ***eco) {
 	}
 
 	/*TODO -- file checking*/
-	fscanf(fp, "%u %u %u %u %u %u %u\n",&(conf->GEN_PROC_COELHOS),
+	fscanf(fp, "%hu %hu %hu %u %u %u %u\n",&(conf->GEN_PROC_COELHOS),
 										&(conf->GEN_PROC_RAPOSAS),
 										&(conf->GEN_COMIDA_RAPOSAS),
 										&(conf->N_GEN),

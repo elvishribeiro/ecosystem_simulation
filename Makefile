@@ -33,5 +33,9 @@ $(PROJ_NAME): $(OBJ)
 main.o: main.c $(H_SOURCE)
 	$(CC) -o $@ $< $(CC_FLAGS)
 
+paralelo:
+	gcc -g -Wall -fopenmp *.c -o main -DPARALELO
+	rm -rf *.o *.out *.dot *.txt *~
+
 clean:
 	rm -rf *.o *.out *.dot *.txt $(PROJ_NAME) *~

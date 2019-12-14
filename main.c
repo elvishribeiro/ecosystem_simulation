@@ -45,7 +45,7 @@ int main (int argc, char **argv) {
 		printf("-------GEN:%2d-------\n", t);
 		#endif
 
-		// COELHO
+		// REGRAS DO COELHO
 		#ifdef PARALELO
 		#pragma omp parallel for      //paralelo
 		#endif
@@ -57,7 +57,17 @@ int main (int argc, char **argv) {
 				}	
 			}
 		}
-		conflict(eco, conf, RABBIT);
+		//conflict(eco, conf, RABBIT);
+
+		//CONFLITOS DO COELHO
+		#ifdef PARALELO
+		#pragma omp parallel for   //paralelo
+		#endif
+		for (unsigned int i = 0; i < conf.L; i++){
+			for (unsigned int j = 0; j < conf.C; j++){
+				eco[i][j].animal = choose_rabbit(eco[i][j]);
+			}
+		}
 		//deepcopy(eco, next_eco, conf.L, conf.C);
 
 		#ifdef STEP2
@@ -67,6 +77,7 @@ int main (int argc, char **argv) {
 			printf("-------GEN:%2d-------\n", t);
 		#endif
 
+		//REGRAS DA RAPOSA
 		#ifdef PARALELO
 		#pragma omp parallel for     //paralelo
 		#endif
@@ -78,7 +89,17 @@ int main (int argc, char **argv) {
 				}	
 			}
 		}
-		conflict(eco, conf, FOX);
+
+		//CONFLITOS DA RAPOSA
+		//conflict(eco, conf, FOX);
+		#ifdef PARALELO
+		#pragma omp parallel for    //paralelo
+		#endif
+		for (unsigned int i = 0; i < conf.L; i++){
+			for (unsigned int j = 0; j < conf.C; j++){
+				eco[i][j].animal = choose_fox(eco[i][j]);
+			}
+		}
 		//deepcopy(eco, next_eco, conf.L, conf.C);
 
 		#ifdef STEP

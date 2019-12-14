@@ -214,11 +214,10 @@ animal_t choose_fox (object_t object) {
 		return NEWANIMAL(EMPTY, -1, -1);
 }
 
-void conflict (object_t **eco, config_t conf, int type) {
+/*void conflict (object_t **eco, config_t conf, int type) {
 	if (type == RABBIT) {
-		#ifdef PARALELO
-		#pragma omp parallel for   //paralelo
-		#endif
+		//#ifdef PARALELO
+		#pragma omp parallel for   //paralelo#endif
 		for (unsigned int i = 0; i < conf.L; i++){
 			for (unsigned int j = 0; j < conf.C; j++){
 				eco[i][j].animal = choose_rabbit(eco[i][j]);
@@ -226,13 +225,12 @@ void conflict (object_t **eco, config_t conf, int type) {
 		}
 	} 
 	else if (type == FOX) {
-		#ifdef PARALELO
-		#pragma omp parallel for    //paralelo
-		#endif
+		//#ifdef PARALELO
+		#pragma omp parallel for    //paralelo#endif
 		for (unsigned int i = 0; i < conf.L; i++){
 			for (unsigned int j = 0; j < conf.C; j++){
 				eco[i][j].animal = choose_fox(eco[i][j]);
 			}
 		}
 	}
-}
+}*/
