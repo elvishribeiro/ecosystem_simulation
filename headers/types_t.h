@@ -5,6 +5,7 @@
 	#include <stdio.h>
 	#include <errno.h>
 	#include <string.h>
+	#include <omp.h>
 	#include "coord_t.h"
 	#include "config_t.h"
 	
@@ -12,7 +13,13 @@
 	#define RABBIT 1
 	#define FOX 2
 	#define ROCK 3
-	
+
+	#define UP 0
+	#define RIGHT 1
+	#define DOWN 2
+	#define LEFT 3
+	#define CENTER 4
+
 	/* Macros for deferencing pointers*/
 	#define RABBIT_P(A) ((rabbit_t*)A)
 	#define FOX_P(A) ((fox_t*)A)
@@ -26,24 +33,20 @@
 	#define _RESET   "\x1b[0m"
 
 	
-	#define NEWANIMAL(GEN_NASCIMENTO, GEN_COMIDA) (animal_t){ \
+	#define NEWANIMAL(TYPE, GEN_NASCIMENTO, GEN_COMIDA) (animal_t){ \
+					  .type = TYPE, \
 					  .gen_nascimento = GEN_NASCIMENTO, \
 					  .gen_comida = GEN_COMIDA}
 
 	typedef struct animal_t {
+		unsigned short int type;
 		unsigned int gen_nascimento;
 		unsigned int gen_comida;
 	} animal_t;
 
 	typedef struct object_t {
-		unsigned short int type;
 		animal_t animal;
 		animal_t *candidates;
-		int candidates_n;
-/*		union {
-			fox_t fox;
-			rabbit_t rabbit;
-		};*/
 	} object_t;
 
 	object_t** allocateMatrix (int X, int Y);

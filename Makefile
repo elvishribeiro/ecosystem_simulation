@@ -17,6 +17,7 @@ CC=gcc
 CC_FLAGS=-c         \
          -W         \
          -Wall      \
+         -fopenmp	\
  
 #
 # Compilation and linking
@@ -24,7 +25,7 @@ CC_FLAGS=-c         \
 all: $(PROJ_NAME)
  
 $(PROJ_NAME): $(OBJ)
-	$(CC) -o $@ $^
+	$(CC) -o $@ $^ -fopenmp
 
 %.o: %.c %.h
 	$(CC) -o $@ $< $(CC_FLAGS)
