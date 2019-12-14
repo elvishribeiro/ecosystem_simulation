@@ -23,12 +23,8 @@ int main (int argc, char **argv) {
 	object_t **eco;
 	coord_t p;
 
-	
+	printf("Lendo arquivo");
 	readFile(argv[1], &conf, &eco);
-	//readFile("mx/m20.txt", &conf, &eco);
-	//readFile("config.ini", &conf, &eco);
-	//next_eco = allocateMatrix(conf.L, conf.C);
-	//deepcopy(next_eco, eco, conf.L, conf.C);
 
 	#ifdef STEP
 		system("clear");
@@ -46,9 +42,6 @@ int main (int argc, char **argv) {
 		#endif
 
 		// REGRAS DO COELHO
-		#ifdef PARALELO
-		#pragma omp parallel for      //paralelo
-		#endif
 		for (unsigned int i = 0; i < conf.L; i++){
 			for (unsigned int j = 0; j < conf.C; j++){
 				if (eco[i][j].animal.type == RABBIT){
@@ -57,7 +50,6 @@ int main (int argc, char **argv) {
 				}	
 			}
 		}
-		//conflict(eco, conf, RABBIT);
 
 		//CONFLITOS DO COELHO
 		#ifdef PARALELO
@@ -68,7 +60,6 @@ int main (int argc, char **argv) {
 				eco[i][j].animal = choose_rabbit(eco[i][j]);
 			}
 		}
-		//deepcopy(eco, next_eco, conf.L, conf.C);
 
 		#ifdef STEP2
 			printMatrix (eco, conf.L, conf.C, conf);
@@ -78,9 +69,6 @@ int main (int argc, char **argv) {
 		#endif
 
 		//REGRAS DA RAPOSA
-		#ifdef PARALELO
-		#pragma omp parallel for     //paralelo
-		#endif
 		for (unsigned int i = 0; i < conf.L; i++){
 			for (unsigned int j = 0; j < conf.C; j++){
 				if (eco[i][j].animal.type == FOX){
@@ -91,7 +79,6 @@ int main (int argc, char **argv) {
 		}
 
 		//CONFLITOS DA RAPOSA
-		//conflict(eco, conf, FOX);
 		#ifdef PARALELO
 		#pragma omp parallel for    //paralelo
 		#endif
@@ -100,8 +87,9 @@ int main (int argc, char **argv) {
 				eco[i][j].animal = choose_fox(eco[i][j]);
 			}
 		}
-		//deepcopy(eco, next_eco, conf.L, conf.C);
 
+		printf("\rGeração %d/%d", t, conf.N_GEN);
+		fflush(stdout);
 		#ifdef STEP
 			printMatrix (eco, conf.L, conf.C, conf);
 		#endif
@@ -112,7 +100,7 @@ int main (int argc, char **argv) {
 }
 
 
-/*void printResult (object_t **eco, config_t conf) {
+void printResult (object_t **eco, config_t conf) {
 	int N = 0;
 	for (unsigned int i = 0; i < conf.L; i++)
 		for (unsigned int j = 0; j < conf.C; j++)
@@ -139,4 +127,4 @@ int main (int argc, char **argv) {
 					printf("ROCHA %d %d\n", i, j);
 				}
 			}
-}*/
+}

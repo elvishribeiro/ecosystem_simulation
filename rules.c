@@ -39,32 +39,34 @@ coord_t neighbour(object_t **eco, config_t conf, coord_t p, int type) {
 
 // Inserts a rabbit and resolve possible conflicts
 void rabbit_insert (object_t **eco, animal_t r, coord_t old, coord_t new) {
-		int candidate_id;
+	int candidate_id;
 
-		if (old.y + 1 == new.y)
-			candidate_id = LEFT;
-		else if (old.x - 1 == new.x)
-			candidate_id = DOWN;
-		else if (old.y - 1 == new.y)
-			candidate_id = RIGHT;
-		else if (old.x + 1 == new.x)
-			candidate_id = UP;
-		else if (old.x == new.x && old.y == new.y)
-			candidate_id = CENTER;
+	if (old.y + 1 == new.y)
+		candidate_id = LEFT;
+	else if (old.x - 1 == new.x)
+		candidate_id = DOWN;
+	else if (old.y - 1 == new.y)
+		candidate_id = RIGHT;
+	else if (old.x + 1 == new.x)
+		candidate_id = UP;
+	else if (old.x == new.x && old.y == new.y)
+		candidate_id = CENTER;
 
-		eco[new.x][new.y].candidates[candidate_id] = r;
+	eco[new.x][new.y].candidates[candidate_id] = r;
 }
 
 // Make a move if a available slot is found and returns the new position
 int rabbit_move (object_t **eco, config_t conf, coord_t p) {
-	coord_t new = neighbour(eco, conf, p, EMPTY);										
+	coord_t new = neighbour(eco, conf, p, EMPTY);	
+
 	if (new.x >= 0 && new.y >= 0){
 		if (conf.GEN - eco[p.x][p.y].animal.gen_nascimento > conf.GEN_PROC_COELHOS) {		// Reproduction 
 			rabbit_insert(eco, NEWANIMAL(RABBIT, conf.GEN, -1), p, p);			
 			rabbit_insert(eco, NEWANIMAL(RABBIT, conf.GEN, -1), p, new);
 		} 
 		else {																// Move without reproducing 
-			rabbit_insert(eco, eco[p.x][p.y].animal, p, new);
+			//rabbit_insert(eco, eco[p.x][p.y].animal, p, new);
+			rabbit_insert(eco, NEWANIMAL(RABBIT, eco[p.x][p.y].animal.gen_nascimento, -1), p, new);
 		}
 		return 1;
 	} 										//No neighbours, returns false
@@ -213,24 +215,3 @@ animal_t choose_fox (object_t object) {
 	else 
 		return NEWANIMAL(EMPTY, -1, -1);
 }
-
-/*void conflict (object_t **eco, config_t conf, int type) {
-	if (type == RABBIT) {
-		//#ifdef PARALELO
-		#pragma omp parallel for   //paralelo#endif
-		for (unsigned int i = 0; i < conf.L; i++){
-			for (unsigned int j = 0; j < conf.C; j++){
-				eco[i][j].animal = choose_rabbit(eco[i][j]);
-			}
-		}
-	} 
-	else if (type == FOX) {
-		//#ifdef PARALELO
-		#pragma omp parallel for    //paralelo#endif
-		for (unsigned int i = 0; i < conf.L; i++){
-			for (unsigned int j = 0; j < conf.C; j++){
-				eco[i][j].animal = choose_fox(eco[i][j]);
-			}
-		}
-	}
-}*/
